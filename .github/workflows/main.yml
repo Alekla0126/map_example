@@ -1,34 +1,43 @@
-name: Flutter Web Deploy
+name: Deploy Flutter Web App to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - main # Change this to your deployment branch if needed
 
 jobs:
-  build:    
+  build:
+    name: Build and Deploy
     runs-on: ubuntu-latest
 
+    env:
+      FLUTTER_CHANNEL: stable
+      FLUTTER_VERSION: '3.24.3'
+      APP_NAME: ${{ github.repository }}
+      BASE_HREF: "/t3/"
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-      - name: Build Flutter Web
-        working-directory: app
-        run: |
-          flutter pub get
-          flutter pub run flutter_launcher_icons
-          flutter build web --release --web-renderer html --base-href /
-      - name: Configure git user
-        working-directory: app
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-      - name: Add changes to git
-        working-directory: app
-        run: git --work-tree build/web add --all
-      - name: Commit changes
-        working-directory: app
-        run: git commit -m "Automatic deployment by github-actions"
-      - name: Push to gh-pages
-        working-directory: app
-        run: git push origin HEAD:gh-pages --force
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        channel: ${{ env.FLUTTER_CHANNEL }}
+
+    - name: Set up environment
+      run: flutter config --enable-web
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Build the web app
+      run: flutter build web --base-href="${{ env.BASE_HREF }}"
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: build/web
+        cname: t3.github.io # Adjust this if you have a custom domain.
