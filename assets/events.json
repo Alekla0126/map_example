@@ -1,0 +1,202 @@
+[
+    {
+      "id": 1,
+      "name": "Phuket Food Festival",
+      "latitude": 7.8804,
+      "longitude": 98.3923,
+      "description": "A celebration of Phuket's culinary heritage with local dishes and live music.",
+      "date": "2024-12-20"
+    },
+    {
+      "id": 2,
+      "name": "Phuket Marathon",
+      "latitude": 7.8850,
+      "longitude": 98.3900,
+      "description": "An annual marathon event featuring breathtaking views of Phuket's coastline.",
+      "date": "2024-12-25"
+    },
+    {
+      "id": 3,
+      "name": "Phuket Kite Festival",
+      "latitude": 7.8700,
+      "longitude": 98.4000,
+      "description": "A colorful festival with kites of all shapes and sizes flying across the skies.",
+      "date": "2024-12-30"
+    },
+    {
+      "id": 4,
+      "name": "Beach Yoga Retreat",
+      "latitude": 7.8712,
+      "longitude": 98.4013,
+      "description": "Relax and rejuvenate with yoga sessions on the beautiful beaches of Phuket.",
+      "date": "2024-11-15"
+    },
+    {
+      "id": 5,
+      "name": "Phuket Music Festival",
+      "latitude": 7.8745,
+      "longitude": 98.3855,
+      "description": "A week-long music festival featuring local and international artists.",
+      "date": "2024-11-18"
+    },
+    {
+      "id": 6,
+      "name": "Andaman Seafood Festival",
+      "latitude": 7.8820,
+      "longitude": 98.3950,
+      "description": "Indulge in the finest seafood cuisine from the Andaman Sea.",
+      "date": "2024-12-05"
+    },
+    {
+      "id": 7,
+      "name": "Phuket Boxing Championship",
+      "latitude": 7.8767,
+      "longitude": 98.3890,
+      "description": "Watch thrilling Muay Thai fights in the heart of Phuket.",
+      "date": "2024-12-23"
+    },
+    {
+      "id": 8,
+      "name": "Thai Lantern Festival",
+      "latitude": 7.8600,
+      "longitude": 98.3962,
+      "description": "Light up the sky with thousands of floating lanterns.",
+      "date": "2024-12-12"
+    },
+    {
+      "id": 9,
+      "name": "Phuket Film Festival",
+      "latitude": 7.8705,
+      "longitude": 98.3902,
+      "description": "Screenings of acclaimed films from around the world.",
+      "date": "2024-11-22"
+    },
+    {
+      "id": 10,
+      "name": "Coral Reef Snorkeling",
+      "latitude": 7.8750,
+      "longitude": 98.3860,
+      "description": "Discover the underwater beauty of Phuket's coral reefs.",
+      "date": "2024-12-08"
+    },
+    {
+      "id": 11,
+      "name": "Eco Beach Cleanup",
+      "latitude": 7.8785,
+      "longitude": 98.3872,
+      "description": "Join the community in keeping Phuket's beaches clean and pristine.",
+      "date": "2024-12-17"
+    },
+    {
+      "id": 12,
+      "name": "Phuket Jazz Night",
+      "latitude": 7.8703,
+      "longitude": 98.3945,
+      "description": "An enchanting evening of jazz music in Phuket.",
+      "date": "2024-12-06"
+    },
+    {
+      "id": 13,
+      "name": "Island Hopping Adventure",
+      "latitude": 7.8733,
+      "longitude": 98.3844,
+      "description": "Visit the stunning islands around Phuket on a boat tour.",
+      "date": "2024-12-19"
+    },
+    {
+      "id": 14,
+      "name": "Phuket Adventure Race",
+      "latitude": 7.8772,
+      "longitude": 98.3825,
+      "description": "A thrilling adventure race through Phuket's jungles and beaches.",
+      "date": "2024-12-27"
+    },
+    {
+      "id": 15,
+      "name": "Rainforest Hike",
+      "latitude": 7.8756,
+      "longitude": 98.3912,
+      "description": "Hike through lush rainforests and discover Phuket's natural beauty.",
+      "date": "2024-12-14"
+    },
+    {
+      "id": 16,
+      "name": "Phuket Night Market",
+      "latitude": 7.8802,
+      "longitude": 98.3927,
+      "description": "Shop for souvenirs and local delicacies at this vibrant night market.",
+      "date": "2024-11-28"
+    },
+    {
+      "id": 17,
+      "name": "Sunset Beach Party",
+      "latitude": 7.8739,
+      "longitude": 98.3950,
+      "description": "Dance the night away at this lively beach party.",
+      "date": "2024-12-09"
+    },
+    {
+      "id": 18,
+      "name": "Sailing Regatta",
+      "latitude": 7.8783,
+      "longitude": 98.3893,
+      "description": "Join or watch an exciting sailing competition in Phuket's waters.",
+      "date": "2024-12-11"
+    },
+    {
+      "id": 19,
+      "name": "Traditional Thai Dance Show",
+      "latitude": 7.8770,
+      "longitude": 98.3938,
+      "description": "An enchanting evening of classical Thai dance performances.",
+      "date": "2024-12-15"
+    },
+    {
+      "id": 20,
+      "name": "Phuket Food Trail",
+      "latitude": 7.8810,
+      "longitude": 98.3885,
+      "description": "Explore the best street food spots in Phuket with a guided tour.",
+      "date": "2024-11-30"
+    },
+    {
+      "id": 21,
+      "name": "Phuket Street Art Walk",
+      "latitude": 7.8758,
+      "longitude": 98.3865,
+      "description": "Explore vibrant street art and murals in Old Town Phuket.",
+      "date": "2024-12-10"
+    },
+    {
+      "id": 22,
+      "name": "Phuket Wellness Retreat",
+      "latitude": 7.8717,
+      "longitude": 98.3941,
+      "description": "Relax and rejuvenate with spa treatments and wellness programs.",
+      "date": "2024-12-22"
+    },
+    {
+      "id": 23,
+      "name": "Andaman Fishing Tournament",
+      "latitude": 7.8743,
+      "longitude": 98.3897,
+      "description": "Compete in a thrilling fishing tournament in the Andaman Sea.",
+      "date": "2024-11-20"
+    },
+    {
+      "id": 24,
+      "name": "Beachside Carnival",
+      "latitude": 7.8808,
+      "longitude": 98.3929,
+      "description": "Enjoy games, rides, and delicious snacks at this family-friendly carnival.",
+      "date": "2024-12-13"
+    },
+    {
+      "id": 25,
+      "name": "Phuket Art Exhibition",
+      "latitude": 7.8735,
+      "longitude": 98.3849,
+      "description": "Admire stunning artworks from local and international artists.",
+      "date": "2024-11-25"
+    }
+]  

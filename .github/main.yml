@@ -1,0 +1,34 @@
+name: Flutter Web Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - name: Build Flutter Web
+        working-directory: app
+        run: |
+          flutter pub get
+          flutter pub run flutter_launcher_icons
+          flutter build web --release --web-renderer html --base-href /
+      - name: Configure git user
+        working-directory: app
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+      - name: Add changes to git
+        working-directory: app
+        run: git --work-tree build/web add --all
+      - name: Commit changes
+        working-directory: app
+        run: git commit -m "Automatic deployment by github-actions"
+      - name: Push to gh-pages
+        working-directory: app
+        run: git push origin HEAD:gh-pages --force
