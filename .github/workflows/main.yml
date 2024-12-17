@@ -12,9 +12,9 @@ jobs:
 
     env:
       FLUTTER_CHANNEL: stable
-      FLUTTER_VERSION: '3.24.3'
+      FLUTTER_VERSION: '3.27.1'
       APP_NAME: ${{ github.repository }}
-      BASE_HREF: "/t3/"
+      BASE_HREF: "/map_example/"
 
     steps:
     - name: Checkout code
