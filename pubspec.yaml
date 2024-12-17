@@ -31,7 +31,6 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  mapbox_gl: ^0.16.0 
   flutter_bloc: ^8.1.6
   redux: ^5.0.0
   flutter_redux: ^0.10.0
