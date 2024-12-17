@@ -1,4 +1,4 @@
-import 'marker_state.dart';
+import '../states/marker_state.dart';
 
 enum MarkerActions { AddMarker }
 

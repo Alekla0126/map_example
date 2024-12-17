@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'map_bloc.dart';
+import '../blocs/map_bloc.dart';
 
 class SearchBar extends StatelessWidget {
   @override

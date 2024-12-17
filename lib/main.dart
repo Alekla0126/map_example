@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'marker_reducer.dart';
-import 'intro_screen.dart';
-import 'marker_state.dart';
+import 'reducers/marker_reducer.dart';
+import 'screens/intro_screen.dart';
+import 'states/marker_state.dart';
 
 void main() {
   final store = Store<MarkerState>(markerReducer, initialState: initialState);
