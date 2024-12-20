@@ -1,16 +1,40 @@
-# map_example
+# TapMap
 
-A new Flutter project.
+## Description
+TapMap is an interactive map application designed to provide users with easy access to geographic information. Users can tap on various points on the map to learn more about the location or find directions.
 
-## Getting Started
+## Features
+- Interactive map interface
+- Information pop-ups for landmarks
+- Route navigation
+- Search functionality for locations
 
-This project is a starting point for a Flutter application.
+## Installation
+To install TapMap, follow these steps:
 
-A few resources to get you started if this is your first Flutter project:
+1. Clone the repository:
+   git clone git@github.com:Alekla0126/map_example.git
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+2. Navigate to the project directory:
+   cd map_example
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+3. Install dependencies:
+   npm install
+
+## Usage
+To run TapMap as a Flutter web project, use the following command:
+flutter run -d chrome
+
+The application will be available on `http://localhost:3000`.
+
+## Contributing
+Contributions to TapMap are welcome! Please adhere to the following guidelines:
+
+- Fork the repository
+- Create a new branch (`git checkout -b feature/your_feature`)
+- Commit your changes (`git commit -am 'Add some feature'`)
+- Push to the branch (`git push origin feature/your_feature`)
+- Open a pull request
+
+## License
+This project is licensed under [MIT](LICENSE).
