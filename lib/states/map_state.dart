@@ -1,9 +1,3 @@
-
-
-
-
-
-
 class MapState {
   final List<Map<String, dynamic>> markers;
   final bool isLoading;
