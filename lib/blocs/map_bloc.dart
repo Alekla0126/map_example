@@ -1,61 +1,104 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import '../repositories/map_repository.dart';
+import 'package:latlong2/latlong.dart';
+import 'dart:async';
 
-class MapEvent {}
+// Events
+abstract class MapEvent {}
+
+class FetchCurrentLocation extends MapEvent {}
+
+class ToggleDarkMode extends MapEvent {}
+
+class GenerateRandomEvents extends MapEvent {
+  final LatLng center;
+  final int count;
+  final double radius;
+
+  GenerateRandomEvents(this.center, this.count, this.radius);
+}
 
 class SearchLocation extends MapEvent {
   final String query;
+
   SearchLocation(this.query);
 }
 
+// State
 class MapState {
+  final bool isDarkMode;
+  final LatLng? currentLocation;
+  final LatLng? mapCenter;
+  final double zoomLevel;
   final List<Map<String, dynamic>> markers;
-  final bool isLoading;
-  final String? errorMessage;
+  final List<Map<String, dynamic>> favorites;
+  final List<Map<String, dynamic>> suggestions;
+  final bool isSearching;
 
-  MapState({required this.markers, this.isLoading = false, this.errorMessage});
+  MapState({
+    this.isDarkMode = false,
+    this.currentLocation,
+    this.mapCenter,
+    this.zoomLevel = 14.0, // Default zoom level
+    this.markers = const [],
+    this.favorites = const [],
+    this.suggestions = const [],
+    this.isSearching = false,
+  });
 
   MapState copyWith({
+    bool? isDarkMode,
+    LatLng? currentLocation,
+    LatLng? mapCenter,
+    double? zoomLevel,
     List<Map<String, dynamic>>? markers,
-    bool? isLoading,
-    String? errorMessage,
+    List<Map<String, dynamic>>? favorites,
+    List<Map<String, dynamic>>? suggestions,
+    bool? isSearching,
   }) {
     return MapState(
+      isDarkMode: isDarkMode ?? this.isDarkMode,
+      currentLocation: currentLocation ?? this.currentLocation,
+      mapCenter: mapCenter ?? this.mapCenter,
+      zoomLevel: zoomLevel ?? this.zoomLevel,
       markers: markers ?? this.markers,
-      isLoading: isLoading ?? this.isLoading,
-      errorMessage: errorMessage ?? this.errorMessage,
+      favorites: favorites ?? this.favorites,
+      suggestions: suggestions ?? this.suggestions,
+      isSearching: isSearching ?? this.isSearching,
     );
   }
 }
 
+// Bloc
 class MapBloc extends Bloc<MapEvent, MapState> {
-  static const MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoiYWxla2xhMDEyNiIsImEiOiJjbGp0NTNvd2UwM2RnM2VtbDlieHkwNTBiIn0.oEhomSTKaUBKdzIw2cyeSw";
+  final MapRepository repository;
 
-  MapBloc() : super(MapState(markers: []));
+  MapBloc({required this.repository}) : super(MapState()) {
+    on<FetchCurrentLocation>(_onFetchCurrentLocation);
+    on<ToggleDarkMode>(_onToggleDarkMode);
+    on<GenerateRandomEvents>(_onGenerateRandomEvents);
+    on<SearchLocation>(_onSearchLocation);
+  }
 
-  Stream<MapState> mapEventToState(MapEvent event) async* {
-    if (event is SearchLocation) {
-      yield state.copyWith(isLoading: true);
-      try {
-        final url =
-            "https://api.mapbox.com/geocoding/v5/mapbox.places/${event.query}.json?access_token=$MAPBOX_ACCESS_TOKEN";
-        final response = await http.get(Uri.parse(url));
-        if (response.statusCode == 200) {
-          final data = json.decode(response.body);
-          if (data['features'].isNotEmpty) {
-            final coordinates = data['features'][0]['geometry']['coordinates'];
-            final lat = coordinates[1];
-            final lng = coordinates[0];
-            yield state.copyWith(
-              isLoading: false,
-              markers: [...state.markers, {'latitude': lat, 'longitude': lng}],
-            );
-          }
-        }
-      } catch (e) {
-        yield state.copyWith(isLoading: false, errorMessage: e.toString());
-      }
-    }
+  Future<void> _onFetchCurrentLocation(
+      FetchCurrentLocation event, Emitter<MapState> emit) async {
+    final location = await repository.fetchCurrentLocation();
+    emit(state.copyWith(currentLocation: location));
+  }
+
+  void _onToggleDarkMode(ToggleDarkMode event, Emitter<MapState> emit) {
+    emit(state.copyWith(isDarkMode: !state.isDarkMode));
+  }
+
+  Future<void> _onGenerateRandomEvents(
+      GenerateRandomEvents event, Emitter<MapState> emit) async {
+    final events = repository.generateRandomEvents(
+        event.center, event.count, event.radius);
+    emit(state.copyWith(markers: [...state.markers, ...events]));
+  }
+
+  void _onSearchLocation(SearchLocation event, Emitter<MapState> emit) {
+    final suggestions = repository.searchSuggestions(event.query);
+    emit(state.copyWith(suggestions: suggestions, isSearching: true));
   }
 }

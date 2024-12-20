@@ -14,4 +14,3 @@ class CustomMarker {
     required this.child,
   });
 }
-

@@ -1,0 +1,42 @@
+[
+    {
+        "name": "Food Festival",
+        "description": "Celebrate local cuisine with live music and activities."
+    },
+    {
+        "name": "Marathon",
+        "description": "Join a thrilling marathon event with scenic routes."
+    },
+    {
+        "name": "Kite Festival",
+        "description": "Fly colorful kites in the beautiful open skies."
+    },
+    {
+        "name": "Yoga Retreat",
+        "description": "Relax and rejuvenate with yoga on tranquil beaches."
+    },
+    {
+        "name": "Music Festival",
+        "description": "Experience live performances by top artists."
+    },
+    {
+        "name": "Seafood Fest",
+        "description": "Indulge in fresh seafood straight from the ocean."
+    },
+    {
+        "name": "Boxing Championship",
+        "description": "Witness thrilling Muay Thai fights."
+    },
+    {
+        "name": "Lantern Festival",
+        "description": "Light up the night with floating lanterns."
+    },
+    {
+        "name": "Film Festival",
+        "description": "Catch screenings of award-winning movies."
+    },
+    {
+        "name": "Beach Cleanup",
+        "description": "Help preserve the beauty of our beaches."
+    }
+]

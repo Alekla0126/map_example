@@ -38,6 +38,8 @@ dependencies:
   geocoding: ^3.0.0
   flutter_map: ^7.0.2
   url_launcher: ^6.3.1
+  geolocator: ^13.0.2
+  shared_preferences: ^2.3.4
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +54,7 @@ dev_dependencies:
 
 assets:
     - assets/events.json
+    - assets/community_events.json
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
