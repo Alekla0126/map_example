@@ -1,5 +1,5 @@
+import '../blocs/unread_messages_bloc.dart' as unread_bloc;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/unread_messages_bloc.dart';
 import '../widgets/floating_buttons.dart';
 import 'package:flutter/material.dart';
 import '../screens/auth_screen.dart';
@@ -7,7 +7,6 @@ import '../blocs/auth_bloc.dart';
 
 class FloatingActionButtons extends StatelessWidget {
   final bool isDarkMode;
-  final int unreadMessages;
   final VoidCallback onDarkModeToggle;
   final VoidCallback onAddMarker;
   final VoidCallback onViewFavorites;
@@ -15,7 +14,6 @@ class FloatingActionButtons extends StatelessWidget {
 
   const FloatingActionButtons({
     required this.isDarkMode,
-    required this.unreadMessages,
     required this.onDarkModeToggle,
     required this.onAddMarker,
     required this.onViewFavorites,
@@ -42,6 +40,7 @@ class FloatingActionButtons extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Floating buttons for dark mode, markers, etc.
           FloatingButtons(
             isDarkMode: isDarkMode,
             onDarkModeToggle: onDarkModeToggle,
@@ -53,6 +52,8 @@ class FloatingActionButtons extends StatelessWidget {
             },
           ),
           const SizedBox(height: 16),
+
+          // Chat button with unread messages badge
           FloatingActionButton(
             onPressed: openChat,
             child: Stack(
@@ -61,16 +62,23 @@ class FloatingActionButtons extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Icon(Icons.chat),
                 ),
-                BlocBuilder<UnreadMessagesBloc, UnreadMessagesState>(
+
+                // BlocBuilder to show the total unread messages badge
+                BlocBuilder<unread_bloc.UnreadMessagesBloc,
+                    unread_bloc.UnreadMessagesState>(
                   builder: (context, state) {
-                    if (state.unreadCount > 0) {
+                    // Calculate total unread messages across all events
+                    final totalUnreadMessages = state.eventUnreadCounts.values
+                        .fold(0, (sum, count) => sum + count);
+
+                    if (totalUnreadMessages > 0) {
                       return Align(
                         alignment: Alignment.topRight,
                         child: CircleAvatar(
                           backgroundColor: Colors.red,
                           radius: 10,
                           child: Text(
-                            '${state.unreadCount}',
+                            '$totalUnreadMessages',
                             style: const TextStyle(
                                 fontSize: 12, color: Colors.white),
                           ),

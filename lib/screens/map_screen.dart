@@ -1,4 +1,6 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../blocs/unread_messages_bloc.dart';
 import '../widgets/floating_action_buttons_widget.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -10,8 +12,8 @@ import '../helpers/event_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import '../helpers/ui_helper.dart';
+import 'chat_screen_list.dart';
 import 'favourites_screen.dart';
-import 'simple_chat.dart';
 import 'dart:convert';
 
 class MapScreen extends StatefulWidget {
@@ -32,29 +34,14 @@ class _MapScreenState extends State<MapScreen> {
   bool _isSearching = false;
   List<Map<String, dynamic>> _filteredEvents = [];
 
-  // Initialize unread messages and openChat
-  int _unreadMessages = 0;
-
   // Open chat screen
-  void _openChat() {
+  void _openChatList() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SimpleChatScreen(
-          onMessageReceived: () {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              setState(() {
-                _unreadMessages++;
-              });
-            });
-          },
-          onMessagesRead: () {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              setState(() {
-                _unreadMessages = 0;
-              });
-            });
-          },
+        builder: (context) => BlocProvider.value(
+          value: context.read<UnreadMessagesBloc>(),
+          child: ChatListScreen(events: _events),
         ),
       ),
     );
@@ -307,7 +294,6 @@ class _MapScreenState extends State<MapScreen> {
           home: Scaffold(
             floatingActionButton: FloatingActionButtons(
               isDarkMode: isDarkMode,
-              unreadMessages: _unreadMessages,
               onDarkModeToggle: () {
                 StoreProvider.of<bool>(context)
                     .dispatch(DarkModeActions.ToggleDarkMode);
@@ -363,7 +349,7 @@ class _MapScreenState extends State<MapScreen> {
                   });
                 }
               },
-              openChat: _openChat,
+              openChat: _openChatList, // Pass `_openChatList` here
             ),
             body: Stack(
               children: [
