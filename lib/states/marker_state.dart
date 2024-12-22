@@ -1,9 +1,3 @@
-
-
-
-
-
-
 class MarkerState {
   final List<Map<String, dynamic>> markers;
   final List<Map<String, dynamic>> favorites;

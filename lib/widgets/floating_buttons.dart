@@ -5,6 +5,7 @@ class FloatingButtons extends StatelessWidget {
   final VoidCallback onDarkModeToggle;
   final VoidCallback onAddMarker;
   final VoidCallback onViewFavorites;
+  final VoidCallback onLogout;
 
   const FloatingButtons({
     Key? key,
@@ -12,6 +13,7 @@ class FloatingButtons extends StatelessWidget {
     required this.onDarkModeToggle,
     required this.onAddMarker,
     required this.onViewFavorites,
+    required this.onLogout,
   }) : super(key: key);
 
   @override
@@ -25,11 +27,12 @@ class FloatingButtons extends StatelessWidget {
           child: Icon(isDarkMode ? Icons.light_mode : Icons.dark_mode),
         ),
         const SizedBox(height: 16),
-        // FloatingActionButton(
-        //   onPressed: onAddMarker,
-        //   tooltip: 'Add Marker',
-        //   child: const Icon(Icons.add),
-        // ),
+        FloatingActionButton(
+          onPressed: onLogout, // Logout action
+          tooltip: 'Logout',
+          backgroundColor: Colors.red, // Red background for logout
+          child: const Icon(Icons.logout),
+        ),
         const SizedBox(height: 16),
         FloatingActionButton(
           onPressed: onViewFavorites,
