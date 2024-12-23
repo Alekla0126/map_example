@@ -27,6 +27,11 @@ class IncrementUnreadMessages extends UnreadMessagesEvent {
   IncrementUnreadMessages({required this.eventID});
 }
 
+class MarkInitialMessagesSent extends UnreadMessagesEvent {
+  final String eventID;
+  MarkInitialMessagesSent(this.eventID);
+}
+
 // ----------------------------------------------------------------------
 // STATE
 // ----------------------------------------------------------------------
@@ -34,26 +39,32 @@ class IncrementUnreadMessages extends UnreadMessagesEvent {
 class UnreadMessagesState {
   final Map<String, int> eventUnreadCounts;
   final Map<String, List<String>> eventMessages;
+  final Set<String> hasSentInitialMessages;
 
   UnreadMessagesState({
     required this.eventUnreadCounts,
     required this.eventMessages,
+    required this.hasSentInitialMessages,
   });
 
   factory UnreadMessagesState.initial() {
     return UnreadMessagesState(
       eventUnreadCounts: {},
       eventMessages: {},
+      hasSentInitialMessages: {},
     );
   }
 
   UnreadMessagesState copyWith({
     Map<String, int>? eventUnreadCounts,
     Map<String, List<String>>? eventMessages,
+    Set<String>? hasSentInitialMessages,
   }) {
     return UnreadMessagesState(
       eventUnreadCounts: eventUnreadCounts ?? this.eventUnreadCounts,
       eventMessages: eventMessages ?? this.eventMessages,
+      hasSentInitialMessages:
+          hasSentInitialMessages ?? this.hasSentInitialMessages,
     );
   }
 }
@@ -69,6 +80,7 @@ class UnreadMessagesBloc
     on<ResetUnreadForEvent>(_onResetUnreadForEvent);
     on<ScheduleInitialMessagesForEvent>(_onScheduleInitialMessagesForEvent);
     on<IncrementUnreadMessages>(_onIncrementUnreadMessages);
+    on<MarkInitialMessagesSent>(_onMarkInitialMessagesSent);
   }
 
   void _onAddMessageToEvent(
@@ -77,11 +89,12 @@ class UnreadMessagesBloc
   ) {
     final updatedEventMessages =
         Map<String, List<String>>.from(state.eventMessages);
-    final updatedUnreadCounts =
-        Map<String, int>.from(state.eventUnreadCounts);
+    final updatedUnreadCounts = Map<String, int>.from(state.eventUnreadCounts);
 
-    updatedEventMessages[event.eventID] =
-        [...?updatedEventMessages[event.eventID], event.message];
+    updatedEventMessages[event.eventID] = [
+      ...?updatedEventMessages[event.eventID],
+      event.message
+    ];
 
     updatedUnreadCounts[event.eventID] =
         (updatedUnreadCounts[event.eventID] ?? 0) + 1;
@@ -98,8 +111,7 @@ class UnreadMessagesBloc
     ResetUnreadForEvent event,
     Emitter<UnreadMessagesState> emit,
   ) {
-    final updatedUnreadCounts =
-        Map<String, int>.from(state.eventUnreadCounts);
+    final updatedUnreadCounts = Map<String, int>.from(state.eventUnreadCounts);
 
     updatedUnreadCounts[event.eventID] = 0;
 
@@ -133,8 +145,7 @@ class UnreadMessagesBloc
     IncrementUnreadMessages event,
     Emitter<UnreadMessagesState> emit,
   ) {
-    final updatedUnreadCounts =
-        Map<String, int>.from(state.eventUnreadCounts);
+    final updatedUnreadCounts = Map<String, int>.from(state.eventUnreadCounts);
 
     updatedUnreadCounts[event.eventID] =
         (updatedUnreadCounts[event.eventID] ?? 0) + 1;
@@ -142,5 +153,15 @@ class UnreadMessagesBloc
     emit(state.copyWith(eventUnreadCounts: updatedUnreadCounts));
 
     print("Unread messages incremented for ${event.eventID}");
+  }
+
+  void _onMarkInitialMessagesSent(
+    MarkInitialMessagesSent event,
+    Emitter<UnreadMessagesState> emit,
+  ) {
+    final updatedHasSent = Set<String>.from(state.hasSentInitialMessages);
+    updatedHasSent.add(event.eventID);
+
+    emit(state.copyWith(hasSentInitialMessages: updatedHasSent));
   }
 }

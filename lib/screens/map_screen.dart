@@ -1,9 +1,9 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../blocs/unread_messages_bloc.dart';
 import '../widgets/floating_action_buttons_widget.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import '../blocs/unread_messages_bloc.dart';
 import '../reducers/dark_mode_reducer.dart';
 import '../widgets/search_bar_widget.dart';
 import '../helpers/location_helpers.dart';
@@ -73,7 +73,7 @@ class _MapScreenState extends State<MapScreen> {
 
     // Add unique IDs to each event
     final eventsWithIds = randomEvents.asMap().entries.map((entry) {
-      final index = entry.key;
+      final index = entry.key+1;
       final event = entry.value;
       return {
         ...event,

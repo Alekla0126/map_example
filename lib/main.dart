@@ -1,7 +1,7 @@
+import 'package:map_example/blocs/unread_messages_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:map_example/blocs/unread_messages_bloc.dart';
 import 'reducers/dark_mode_reducer.dart';
 import 'screens/chat_screen_list.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Sample list of events to pass to ChatListScreen
     final List<Map<String, dynamic>> events = [
-      {'id': 'event1', 'name': 'Event 1'},
+      {'id': 'event-1', 'name': 'Event 1'},
       {'id': 'event2', 'name': 'Event 2'},
       {'id': 'event3', 'name': 'Event 3'},
     ];
@@ -57,7 +57,25 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (_) => DarkModeBloc(),
           ),
-          BlocProvider(create: (_) => UnreadMessagesBloc()),
+          BlocProvider(
+            create: (context) {
+              final unreadBloc = UnreadMessagesBloc();
+
+              // -------------- DISPATCH INITIAL MESSAGES --------------
+              // Send 3 initial messages to "event-1" at app startup
+              unreadBloc.add(AddMessageToEvent(
+                eventID: 'event-1',
+                message: 'Welcome to Event 1!',
+              ));
+              unreadBloc.add(AddMessageToEvent(
+                eventID: 'event-1',
+                message: 'Let me know if you have questions about the event.',
+              ));
+              // --------------------------------------------------------
+
+              return unreadBloc;
+            },
+          ),
         ],
         child: StoreBuilder<bool>(
           builder: (context, darkModeStore) {
@@ -71,10 +89,10 @@ class MyApp extends StatelessWidget {
               routes: {
                 '/': (context) => AuthScreen(),
                 '/map': (context) => MapScreen(),
-                '/chatList': (context) => ChatListScreen(events: events), // Pass events to ChatListScreen
+                '/chatList': (context) => ChatListScreen(events: events),
                 '/chat': (context) {
                   final args = ModalRoute.of(context)!.settings.arguments
-                      as Map<String, dynamic>; // Ensure arguments are passed
+                      as Map<String, dynamic>;
                   return SimpleChatScreen(
                     eventID: args['eventID'],
                     onMessageReceived: () {

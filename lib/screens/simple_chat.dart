@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/unread_messages_bloc.dart';
+import 'package:flutter/material.dart';
 
 class SimpleChatScreen extends StatefulWidget {
-  final String eventID; // Event ID to identify this chat
+  final String eventID;
   final VoidCallback onMessageReceived;
   final VoidCallback onMessagesRead;
 
@@ -25,57 +25,40 @@ class _SimpleChatScreenState extends State<SimpleChatScreen> {
   void initState() {
     super.initState();
 
-    // Mark messages as read for the specific event
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<UnreadMessagesBloc>().add(
-        ResetUnreadForEvent(eventID: widget.eventID),
-      );
-      widget.onMessagesRead();
-    });
-
-    // Simulate initial messages for the first point
-    if (widget.eventID == 'event-0') {
-      _simulateInitialMessages();
-    }
+    // Immediately mark all messages as read if in the current chat
+    _markMessagesAsRead();
   }
 
-  void _simulateInitialMessages() {
-    final simulatedMessages = [
-      'Friend: Welcome to the first point!',
-      'Friend: Let me know if you have questions.',
-      'Friend: Check out the details on the map!',
-    ];
-
-    Future.forEach<String>(simulatedMessages, (message) async {
-      await Future.delayed(const Duration(seconds: 2));
-      context.read<UnreadMessagesBloc>().add(
-            AddMessageToEvent(eventID: widget.eventID, message: message),
-          );
-      widget.onMessageReceived();
-    });
+  void _markMessagesAsRead() {
+    context.read<UnreadMessagesBloc>().add(
+          ResetUnreadForEvent(eventID: widget.eventID),
+        );
+    widget.onMessagesRead();
   }
 
   void _sendMessage(String text) {
     context.read<UnreadMessagesBloc>().add(
           AddMessageToEvent(eventID: widget.eventID, message: 'You: $text'),
         );
-    widget.onMessagesRead();
+    _markMessagesAsRead(); // Ensure messages are marked as read immediately
     _messageController.clear();
 
-    // Simulate a friend's response after a delay
+    // Simulate friend response
     Future.delayed(const Duration(seconds: 2), () {
       context.read<UnreadMessagesBloc>().add(
             AddMessageToEvent(
-                eventID: widget.eventID,
-                message: 'Friend: Got it! Thanks for sharing.'),
+              eventID: widget.eventID,
+              message: 'Friend: Got it! Thanks for sharing.',
+            ),
           );
       widget.onMessageReceived();
+      _markMessagesAsRead(); // Mark friend’s response as read
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
@@ -98,7 +81,9 @@ class _SimpleChatScreenState extends State<SimpleChatScreen> {
                           : Alignment.centerLeft,
                       child: Container(
                         margin: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 10),
+                          vertical: 5,
+                          horizontal: 10,
+                        ),
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: isUserMessage
