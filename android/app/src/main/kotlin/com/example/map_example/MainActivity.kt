@@ -1,4 +1,4 @@
-package com.example.map_example
+package com.alekla0126.tapmap
 
 import io.flutter.embedding.android.FlutterActivity
 

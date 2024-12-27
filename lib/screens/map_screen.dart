@@ -1,3 +1,4 @@
+import 'package:map_example/widgets/filter_chips_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/floating_action_buttons_widget.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -47,6 +48,37 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
+  void _applyFilter(String filter) {
+    List<Map<String, dynamic>> filteredEvents;
+
+    switch (filter) {
+      case 'Cheaper Asc':
+        filteredEvents = [..._events]
+          ..sort((a, b) => (a['price'] ?? 0).compareTo(b['price'] ?? 0));
+        break;
+      case 'Cheaper Desc':
+        filteredEvents = [..._events]
+          ..sort((a, b) => (b['price'] ?? 0).compareTo(a['price'] ?? 0));
+        break;
+      case 'WiFi':
+        filteredEvents = _events.where((e) => e['wifi'] == true).toList();
+        break;
+      case 'Coffee':
+        filteredEvents = _events.where((e) => e['coffee'] == true).toList();
+        break;
+      case 'Place to Work':
+        filteredEvents = _events.where((e) => e['workspace'] == true).toList();
+        break;
+      default:
+        filteredEvents = _events;
+    }
+
+    setState(() {
+      _filteredEvents = filteredEvents;
+      _updateMarkers();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -73,7 +105,7 @@ class _MapScreenState extends State<MapScreen> {
 
     // Add unique IDs to each event
     final eventsWithIds = randomEvents.asMap().entries.map((entry) {
-      final index = entry.key+1;
+      final index = entry.key + 1;
       final event = entry.value;
       return {
         ...event,
@@ -320,15 +352,12 @@ class _MapScreenState extends State<MapScreen> {
                     orElse: () => {},
                   );
 
-                  // Move and center the map on the selected point
                   _mapController.move(selectedLocation, 16.0);
 
-                  // Show the marker popup and update markers
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     _showMarkerPopup(context, selectedEvent);
                   });
 
-                  // Temporarily show only the selected marker
                   setState(() {
                     _allMarkers.clear();
                     _allMarkers.add(
@@ -349,7 +378,7 @@ class _MapScreenState extends State<MapScreen> {
                   });
                 }
               },
-              openChat: _openChatList, // Pass `_openChatList` here
+              openChat: _openChatList,
             ),
             body: Stack(
               children: [
@@ -359,44 +388,53 @@ class _MapScreenState extends State<MapScreen> {
                   allMarkers: _allMarkers,
                   isDarkMode: isDarkMode,
                 ),
-                SearchBarWidget(
-                  searchController: _searchController,
-                  isDarkMode: isDarkMode,
-                  isSearching: _isSearching,
-                  filteredEvents: _filteredEvents,
-                  onQueryChanged: _updateSuggestions,
-                  onEventSelected: (event) {
-                    _searchController.clear();
-                    _updateSuggestions('');
+                Positioned(
+                  top: 80,
+                  left: 10,
+                  right: 10,
+                  child: Column(
+                    children: [
+                      SearchBarWidget(
+                        searchController: _searchController,
+                        isDarkMode: isDarkMode,
+                        isSearching: _isSearching,
+                        filteredEvents: _filteredEvents,
+                        onQueryChanged: _updateSuggestions,
+                        onEventSelected: (event) {
+                          _searchController.clear();
+                          _updateSuggestions('');
 
-                    final LatLng point = event['point'] as LatLng;
+                          final LatLng point = event['point'] as LatLng;
 
-                    // Move and zoom the map
-                    _mapController.move(
-                        point, 16.0); // Zoom level adjusted to 16
+                          _mapController.move(point, 16.0);
 
-                    // Update markers to highlight the selected event
-                    setState(() {
-                      _allMarkers.clear();
-                      _allMarkers.add(
-                        Marker(
-                          point: point,
-                          width: 50.0,
-                          height: 50.0,
-                          child: GestureDetector(
-                            onTap: () => _showMarkerPopup(context, event),
-                            child: Icon(
-                              Icons.location_on,
-                              color: Colors
-                                  .blue, // Highlighted color for selected marker
-                              size: 50.0,
-                            ),
-                          ),
-                        ),
-                      );
-                    });
-                    _showMarkerPopup(context, event); // Show event details
-                  },
+                          setState(() {
+                            _allMarkers.clear();
+                            _allMarkers.add(
+                              Marker(
+                                point: point,
+                                width: 50.0,
+                                height: 50.0,
+                                child: GestureDetector(
+                                  onTap: () => _showMarkerPopup(context, event),
+                                  child: Icon(
+                                    Icons.location_on,
+                                    color: Colors.blue,
+                                    size: 50.0,
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
+                          _showMarkerPopup(context, event);
+                        },
+                      ),
+                      const SizedBox(height: 10), // Space between widgets
+                      FilterChipsWidget(
+                        onFilterSelected: _applyFilter,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
